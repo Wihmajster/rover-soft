@@ -10,7 +10,22 @@ Description of the Sirius hardware. Package provides:
     $ roscd sirius_description/urdf/
     $ xacro sirius.urdf.xacro -o sirius.urdf
     ```
-| ![sirius.urdf.xacro](docs/sirius.jpg) | ![sirius.urdf.xacro](docs/sirius_visual.png) | ![sirius.urdf.xacro](docs/sirius_collision.png) |
-|---------------------------------------|----------------------------------------------|-------------------------------------------------|
-| Sirius II                             | Model wizualny                               | Model kolizyjny                                 |
 
+<table>
+  <thead>
+    <tr>
+      <th width="500px">Prawdziwy robot</th>
+      <th width="500px">Model wizualny</th>
+      <th width="500px">Model kolizyjny</th>
+    </tr>
+  </thead>
+</table>
+<table>
+  <thead>
+    <tr>
+      <th width="500px"><img src="docs/sirius.jpg" alt="Sirius II (Olgierd Skromak 2023)" /></th>
+      <th width="500px"><img src="docs/sirius_visual.png" alt="Model wizualny" /></th>
+      <th width="500px"><img src="docs/sirius_collision.png" alt="Model kolizyjny" /></th>
+    </tr>
+  </thead>
+</table>
