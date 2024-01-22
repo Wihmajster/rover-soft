@@ -5,7 +5,8 @@
   <description>Sirius hardware description</description>
   <maintainer email="gabriel@gabrielb.dev">Gabriel Brzeziński</maintainer>
   <license>Apache-2.0</license>
-
   <buildtool_depend>catkin</buildtool_depend>
-
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>sirius_calibration</exec_depend>
+  <exec_depend>xacro</exec_depend>
 </package>

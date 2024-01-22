@@ -33,8 +33,8 @@
 
     <node pkg="nodelet" type="nodelet" name="depth_image_convertion_nodelet"
         args="load depth_image_proc/convert_metric nodelet_manager">
-        <remap from="image_raw" to="/$(arg name)/depth/depth_registered_raw"/>    
-        <remap from="image" to="/$(arg name)/depth/depth_registered"/>
+        <remap from="image_raw" to="/$(arg name)/depth_registered/image_raw"/>    
+        <remap from="image" to="/$(arg name)/depth_registered/image"/>
     </node>
 
 
@@ -43,8 +43,8 @@
         <param name="queue_size"          value="10"/>
 
         <remap from="rgb/camera_info" to="/$(arg name)/rgb/camera_info"/>
-        <remap from="rgb/image_rect_color" to="/$(arg name)/rgb/image_raw_rgb"/>
-        <remap from="depth_registered/image_rect" to="/$(arg name)/depth/depth_registered"/>    
+        <remap from="rgb/image_rect_color" to="/$(arg name)/rgb/image_raw"/>
+        <remap from="depth_registered/image_rect" to="/$(arg name)/depth_registered/image"/>    
         <remap from="depth_registered/points" to="/$(arg name)/point_cloud/cloud_registered"/>
     </node>
 

@@ -1,7 +1,5 @@
 # sirius_description package
-Description of the Sirius hardware. Package provides:
-- Urdf (xacro) models of the rover
-
+Description of the Sirius hardware. 
 ## URDF
 - `sirius.urdf.xacro`  
     Sirius 2 model  
@@ -14,7 +12,7 @@ Description of the Sirius hardware. Package provides:
 <table>
   <thead>
     <tr>
-      <th width="500px">Prawdziwy robot</th>
+      <th width="500px">Prawdziwy robot <br /> (Olgierd Skromak 2023)</th>
       <th width="500px">Model wizualny</th>
       <th width="500px">Model kolizyjny</th>
     </tr>

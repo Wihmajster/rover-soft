@@ -3,9 +3,7 @@
   <material name="black">       <color rgba="0 0 0 1" /></material>
   <material name="dark_bronze"> <color rgba=".36 .29 .22 1" /></material>
   <material name="dark_gray">   <color rgba="0.35 0.35 0.35 1"/></material>
-  <material name="gold">        <color rgba=".910 .443 .031 1" /></material>
   <material name="gray">        <color rgba=".796 .824 .937 1" /></material>
-  <material name="green">       <color rgba="0 1 0 1" /></material>
   <material name="white">       <color rgba="1 1 1 1" /></material>
   
   <!-- Gazebo colors -->
@@ -33,27 +31,11 @@
       <emissive>0.0 0.0 0.0 0.0</emissive>  
     </material>  
   </xacro:macro>
-  <xacro:macro name="gold">
-    <material>  
-      <ambient>1 .6 .2 1</ambient>  
-      <diffuse>1 .6 .2 1</diffuse>  
-      <specular>.4 .2 .1 1</specular>  
-      <emissive>0.0 0.0 0.0 0.0</emissive>  
-    </material>  
-  </xacro:macro>
   <xacro:macro name="gray">
     <material>  
       <ambient>0.92 0.95 1 1</ambient>  
       <diffuse>0.92 0.95 1 1</diffuse>  
       <specular>1 1 1 1</specular>  
-      <emissive>0.0 0.0 0.0 0.0</emissive>  
-    </material>  
-  </xacro:macro>
-  <xacro:macro name="green">
-    <material>  
-      <ambient>0 1 0 1</ambient>  
-      <diffuse>0 1 0 1</diffuse>  
-      <specular>0 0 0 1</specular>  
       <emissive>0.0 0.0 0.0 0.0</emissive>  
     </material>  
   </xacro:macro>
