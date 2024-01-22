@@ -3,12 +3,12 @@ robot_hardware:
   - wheels_right
 wheels_left:
   type: odrive/OdriveHWInterface
-  motor0: left_front_wheel_joint
-  motor1: left_back_wheel_joint
+  motor0: front_left_wheel_joint
+  motor1: back_left_wheel_joint
 wheels_right:
   type: odrive/OdriveHWInterface
-  motor0: right_front_wheel_joint
-  motor1: right_back_wheel_joint
+  motor0: front_right_wheel_joint
+  motor1: back_right_wheel_joint
 odrive_driver: 
   drivers: ['wheels_left','wheels_right']
   wheels_left: 
