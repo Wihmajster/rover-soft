@@ -18,7 +18,7 @@
  *
  * Modified versions of the original code are licensed under the same
  * Apache License, Version 2.0.
-*/
+ */
 
 #ifndef GAZEBO_ROS_MAGNETOMETER_SENSOR_H
 #define GAZEBO_ROS_MAGNETOMETER_SENSOR_H
@@ -34,63 +34,63 @@
 
 namespace gazebo
 {
-  namespace sensors
-  {
-    class MagnetometerSensor;
-  }
-  /**
-  @anchor GazeboRosMagnetometerSensor
-  \ref GazeboRosMagnetometerSensor is a plugin to simulate a magnetic field sensor. Some things to note:
-  - inheritance from SensorPlugin,
-  - measurements are given by gazebo MagnetometerSensor instead of being computed by the ros plugin
-  */
-  /** @brief Gazebo Ros magnetometer sensor plugin. */
-  class GazeboRosMagnetometerSensor : public SensorPlugin
-  {
-  public:
-    /// \brief Constructor.
-    GazeboRosMagnetometerSensor();
-    /// \brief Destructor.
-    virtual ~GazeboRosMagnetometerSensor();
-    /// \brief Load the sensor.
-    /// \param sensor_ pointer to the sensor.
-    /// \param sdf_ pointer to the sdf config file.
-    virtual void Load(sensors::SensorPtr sensor_, sdf::ElementPtr sdf_);
-
-  protected:
-    /// \brief Update the sensor.
-    virtual void UpdateChild(const gazebo::common::UpdateInfo &/*_info*/);
-
-  private:
-    /// \brief Load the parameters from the sdf file.
-    bool LoadParameters();
-    
-    /// \brief Ros NodeHandle pointer.
-    std::unique_ptr<ros::NodeHandle> node;
-    /// \brief Ros Publisher for imu data.
-    ros::Publisher magnetometer_data_publisher;
-    /// \brief Ros IMU message.
-    sensor_msgs::MagneticField magnetometer_msg;
-
-    /// \brief last time on which the data was published.
-    common::Time last_time;
-    /// \brief Pointer to the update event connection.
-    gazebo::event::ConnectionPtr connection;
-    /// \brief Pointer to the sensor.
-    std::shared_ptr<sensors::MagnetometerSensor> sensor;
-    /// \brief Pointer to the sdf config file.
-    sdf::ElementPtr sdf;
-
-    //loaded parameters
-    /// \brief The data is published on the topic named: /robot_namespace/topic_name.
-    std::string robot_namespace;
-    /// \brief The data is published on the topic named: /robot_namespace/topic_name.
-    std::string topic_name;
-    /// \brief Name of the link of the IMU.
-    std::string body_name;
-    /// \brief Sensor update rate.
-    double update_rate;
-  };
+namespace sensors
+{
+class MagnetometerSensor;
 }
+/**
+@anchor GazeboRosMagnetometerSensor
+\ref GazeboRosMagnetometerSensor is a plugin to simulate a magnetic field sensor. Some things to note:
+- inheritance from SensorPlugin,
+- measurements are given by gazebo MagnetometerSensor instead of being computed by the ros plugin
+*/
+/** @brief Gazebo Ros magnetometer sensor plugin. */
+class GazeboRosMagnetometerSensor : public SensorPlugin
+{
+public:
+  /// \brief Constructor.
+  GazeboRosMagnetometerSensor();
+  /// \brief Destructor.
+  virtual ~GazeboRosMagnetometerSensor();
+  /// \brief Load the sensor.
+  /// \param sensor_ pointer to the sensor.
+  /// \param sdf_ pointer to the sdf config file.
+  virtual void Load(sensors::SensorPtr sensor_, sdf::ElementPtr sdf_);
 
-#endif //GAZEBO_ROS_MAGNETOMETER_SENSOR_H
+protected:
+  /// \brief Update the sensor.
+  virtual void UpdateChild(const gazebo::common::UpdateInfo& /*_info*/);
+
+private:
+  /// \brief Load the parameters from the sdf file.
+  bool LoadParameters();
+
+  /// \brief Ros NodeHandle pointer.
+  std::unique_ptr<ros::NodeHandle> node;
+  /// \brief Ros Publisher for imu data.
+  ros::Publisher magnetometer_data_publisher;
+  /// \brief Ros IMU message.
+  sensor_msgs::MagneticField magnetometer_msg;
+
+  /// \brief last time on which the data was published.
+  common::Time last_time;
+  /// \brief Pointer to the update event connection.
+  gazebo::event::ConnectionPtr connection;
+  /// \brief Pointer to the sensor.
+  std::shared_ptr<sensors::MagnetometerSensor> sensor;
+  /// \brief Pointer to the sdf config file.
+  sdf::ElementPtr sdf;
+
+  // loaded parameters
+  /// \brief The data is published on the topic named: /robot_namespace/topic_name.
+  std::string robot_namespace;
+  /// \brief The data is published on the topic named: /robot_namespace/topic_name.
+  std::string topic_name;
+  /// \brief Name of the link of the IMU.
+  std::string body_name;
+  /// \brief Sensor update rate.
+  double update_rate;
+};
+}  // namespace gazebo
+
+#endif  // GAZEBO_ROS_MAGNETOMETER_SENSOR_H

@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * This code is based on the gazebo_ros_p3d plugin from the gazebo_ros_pkgs 
+ * This code is based on the gazebo_ros_p3d plugin from the gazebo_ros_pkgs
  * Original code repository: https://github.com/ros-simulation/gazebo_ros_pkgs/
  *
  * Modified versions of the original code are licensed under the same
  * Apache License, Version 2.0.
-*/
+ */
 
 #include <tf/tf.h>
 #include "sirius_gazebo_plugins/sirius_gazebo_ros_p3d.h"
@@ -61,8 +61,7 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
   // load parameters
   this->robot_namespace_ = "";
   if (_sdf->HasElement("robotNamespace"))
-    this->robot_namespace_ =
-      _sdf->GetElement("robotNamespace")->Get<std::string>() + "/";
+    this->robot_namespace_ = _sdf->GetElement("robotNamespace")->Get<std::string>() + "/";
 
   if (!_sdf->HasElement("bodyName"))
   {
@@ -75,8 +74,7 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
   this->link_ = _parent->GetLink(this->link_name_);
   if (!this->link_)
   {
-    ROS_FATAL_NAMED("p3d", "gazebo_ros_p3d plugin error: bodyName: %s does not exist\n",
-      this->link_name_.c_str());
+    ROS_FATAL_NAMED("p3d", "gazebo_ros_p3d plugin error: bodyName: %s does not exist\n", this->link_name_.c_str());
     return;
   }
 
@@ -126,7 +124,8 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
     this->frame_offset_.Rot() = ignition::math::Quaterniond(ignition::math::Vector3d(0, 0, 0));
   }
   else
-    this->frame_offset_.Rot() = ignition::math::Quaterniond(_sdf->GetElement("frameRpyOffset")->Get<ignition::math::Vector3d>());
+    this->frame_offset_.Rot() =
+        ignition::math::Quaterniond(_sdf->GetElement("frameRpyOffset")->Get<ignition::math::Vector3d>());
 
   if (!_sdf->HasElement("gaussianNoise"))
   {
@@ -138,8 +137,9 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 
   if (!_sdf->HasElement("updateRate"))
   {
-    ROS_DEBUG_NAMED("p3d", "p3d plugin missing <updateRate>, defaults to 0.0"
-             " (as fast as possible)");
+    ROS_DEBUG_NAMED("p3d",
+                    "p3d plugin missing <updateRate>, defaults to 0.0"
+                    " (as fast as possible)");
     this->update_rate_ = 0;
   }
   else
@@ -149,7 +149,8 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
   if (!ros::isInitialized())
   {
     ROS_FATAL_STREAM_NAMED("p3d", "A ROS node for Gazebo has not been initialized, unable to load plugin. "
-      << "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the gazebo_ros package)");
+                                      << "Load the Gazebo system plugin 'libgazebo_ros_api_plugin.so' in the "
+                                         "gazebo_ros package)");
     return;
   }
 
@@ -166,8 +167,7 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
   if (this->topic_name_ != "")
   {
     this->pub_Queue = this->pmq.addPub<nav_msgs::Odometry>();
-    this->pub_ =
-      this->rosnode_->advertise<nav_msgs::Odometry>(this->topic_name_, 1);
+    this->pub_ = this->rosnode_->advertise<nav_msgs::Odometry>(this->topic_name_, 1);
   }
 
 #if GAZEBO_MAJOR_VERSION >= 8
@@ -188,16 +188,16 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 
   // if frameName specified is "/world", "world", "/map" or "map" report
   // back inertial values in the gazebo world
-  if (this->frame_name_ != "/world" &&
-      this->frame_name_ != "world" &&
-      this->frame_name_ != "/map" &&
+  if (this->frame_name_ != "/world" && this->frame_name_ != "world" && this->frame_name_ != "/map" &&
       this->frame_name_ != "map")
   {
     this->reference_link_ = this->model_->GetLink(this->frame_name_);
     if (!this->reference_link_)
     {
-      ROS_ERROR_NAMED("p3d", "gazebo_ros_p3d plugin: frameName: %s does not exist, will"
-                " not publish pose\n", this->frame_name_.c_str());
+      ROS_ERROR_NAMED("p3d",
+                      "gazebo_ros_p3d plugin: frameName: %s does not exist, will"
+                      " not publish pose\n",
+                      this->frame_name_.c_str());
       return;
     }
   }
@@ -217,16 +217,14 @@ void SiriusGazeboRosP3D::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 #endif
   }
 
-
   // start custom queue for p3d
-  this->callback_queue_thread_ = boost::thread(
-    boost::bind(&SiriusGazeboRosP3D::P3DQueueThread, this));
+  this->callback_queue_thread_ = boost::thread(boost::bind(&SiriusGazeboRosP3D::P3DQueueThread, this));
 
   // New Mechanism for Updating every World Cycle
   // Listen to the update event. This event is broadcast every
   // simulation iteration.
-  this->update_connection_ = event::Events::ConnectWorldUpdateBegin(
-      boost::bind(&SiriusGazeboRosP3D::UpdateChild, this));
+  this->update_connection_ =
+      event::Events::ConnectWorldUpdateBegin(boost::bind(&SiriusGazeboRosP3D::UpdateChild, this));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -249,13 +247,12 @@ void SiriusGazeboRosP3D::UpdateChild()
 #endif
   if (cur_time < this->last_time_)
   {
-      ROS_WARN_NAMED("p3d", "Negative update time difference detected.");
-      this->last_time_ = cur_time;
+    ROS_WARN_NAMED("p3d", "Negative update time difference detected.");
+    this->last_time_ = cur_time;
   }
 
   // rate control
-  if (this->update_rate_ > 0 &&
-      (cur_time-this->last_time_).Double() < (1.0/this->update_rate_))
+  if (this->update_rate_ > 0 && (cur_time - this->last_time_).Double() < (1.0 / this->update_rate_))
     return;
 
   if (this->pub_.getNumSubscribers() > 0)
@@ -318,12 +315,12 @@ void SiriusGazeboRosP3D::UpdateChild()
         // apply xyz offsets and get position and rotation components
         pose.Pos() = pose.Pos() + this->offset_.Pos();
         // apply rpy offsets
-        pose.Rot() = this->offset_.Rot()*pose.Rot();
+        pose.Rot() = this->offset_.Rot() * pose.Rot();
         pose.Rot().Normalize();
 
         // apply parent frame offsets
         pose.Pos() = this->frame_offset_.Pos() + this->frame_offset_.Rot().RotateVector(pose.Pos());
-        pose.Rot() = this->frame_offset_.Rot()*pose.Rot();
+        pose.Rot() = this->frame_offset_.Rot() * pose.Rot();
         pose.Rot().Normalize();
 
         // compute accelerations (not used)
@@ -338,32 +335,26 @@ void SiriusGazeboRosP3D::UpdateChild()
         this->last_frame_veul_ = frame_veul;
 
         // Fill out messages
-        this->pose_msg_.pose.pose.position.x    = pose.Pos().X();
-        this->pose_msg_.pose.pose.position.y    = pose.Pos().Y();
-        this->pose_msg_.pose.pose.position.z    = pose.Pos().Z();
+        this->pose_msg_.pose.pose.position.x = pose.Pos().X();
+        this->pose_msg_.pose.pose.position.y = pose.Pos().Y();
+        this->pose_msg_.pose.pose.position.z = pose.Pos().Z();
 
         this->pose_msg_.pose.pose.orientation.x = pose.Rot().X();
         this->pose_msg_.pose.pose.orientation.y = pose.Rot().Y();
         this->pose_msg_.pose.pose.orientation.z = pose.Rot().Z();
         this->pose_msg_.pose.pose.orientation.w = pose.Rot().W();
 
-        this->pose_msg_.twist.twist.linear.x  = vpos.X() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.linear.y  = vpos.Y() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.linear.z  = vpos.Z() +
-          this->GaussianKernel(0, this->gaussian_noise_);
+        this->pose_msg_.twist.twist.linear.x = vpos.X() + this->GaussianKernel(0, this->gaussian_noise_);
+        this->pose_msg_.twist.twist.linear.y = vpos.Y() + this->GaussianKernel(0, this->gaussian_noise_);
+        this->pose_msg_.twist.twist.linear.z = vpos.Z() + this->GaussianKernel(0, this->gaussian_noise_);
         // pass euler angular rates
-        this->pose_msg_.twist.twist.angular.x = veul.X() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.angular.y = veul.Y() +
-          this->GaussianKernel(0, this->gaussian_noise_);
-        this->pose_msg_.twist.twist.angular.z = veul.Z() +
-          this->GaussianKernel(0, this->gaussian_noise_);
+        this->pose_msg_.twist.twist.angular.x = veul.X() + this->GaussianKernel(0, this->gaussian_noise_);
+        this->pose_msg_.twist.twist.angular.y = veul.Y() + this->GaussianKernel(0, this->gaussian_noise_);
+        this->pose_msg_.twist.twist.angular.z = veul.Z() + this->GaussianKernel(0, this->gaussian_noise_);
 
         // fill in covariance matrix
         /// @todo: let user set separate linear and angular covariance values.
-        double gn2 = this->gaussian_noise_*this->gaussian_noise_;
+        double gn2 = this->gaussian_noise_ * this->gaussian_noise_;
         this->pose_msg_.pose.covariance[0] = gn2;
         this->pose_msg_.pose.covariance[7] = gn2;
         this->pose_msg_.pose.covariance[14] = gn2;
@@ -406,7 +397,7 @@ double SiriusGazeboRosP3D::GaussianKernel(double mu, double sigma)
   // normalized uniform random variable
   double V = ignition::math::Rand::DblUniform();
 
-  double X = sqrt(-2.0 * ::log(U)) * cos(2.0*M_PI * V);
+  double X = sqrt(-2.0 * ::log(U)) * cos(2.0 * M_PI * V);
   // double Y = sqrt(-2.0 * ::log(U)) * sin(2.0*M_PI * V);
 
   // there are 2 indep. vars, we'll just use X
@@ -426,4 +417,4 @@ void SiriusGazeboRosP3D::P3DQueueThread()
     this->p3d_queue_.callAvailable(ros::WallDuration(timeout));
   }
 }
-}
+}  // namespace gazebo

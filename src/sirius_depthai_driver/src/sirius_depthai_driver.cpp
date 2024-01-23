@@ -3,18 +3,16 @@
 #include <sensor_msgs/Image.h>
 #include <sensor_msgs/Imu.h>
 
+#include <bits/stdc++.h>
 #include <functional>
 #include <iostream>
 #include <tuple>
-#include <bits/stdc++.h>
+#include <vector>
 
-// Inludes common necessary includes for development using depthai library
 #include <depthai_bridge/BridgePublisher.hpp>
 #include <depthai_bridge/ImageConverter.hpp>
 #include <depthai_bridge/ImuConverter.hpp>
-#include <vector>
 #include <depthai_ros_msgs/ImuWithMagneticField.h>
-
 
 std::vector<std::string> usbStrings = { "UNKNOWN", "LOW", "FULL", "HIGH", "SUPER", "SUPER_PLUS" };
 
@@ -93,51 +91,54 @@ void addRGBPipeline(dai::Pipeline& pipeline, int fps, dai::node::ColorCamera::Pr
   rgbCamera->isp.link(xOut->input);
 }
 auto addDepthPipeline(dai::Pipeline& pipeline, int fps, dai::node::ColorCamera::Properties::SensorResolution resolution,
-                    std::string name, dai::CameraBoardSocket socket)
+                      std::string name, dai::CameraBoardSocket socket)
 {
   auto stereo = pipeline.create<dai::node::StereoDepth>();
 
-  stereo->initialConfig.setConfidenceThreshold(200);        // Known to be best
-  stereo->setRectifyEdgeFillColor(0);                              // black, to better see the cutout
-  stereo->initialConfig.setLeftRightCheckThreshold(5);  // Known to be best
+  stereo->initialConfig.setConfidenceThreshold(200);
+  stereo->setRectifyEdgeFillColor(0);
+  stereo->initialConfig.setLeftRightCheckThreshold(5);
   stereo->setLeftRightCheck(true);
   stereo->setExtendedDisparity(false);
   stereo->setSubpixel(true);
   stereo->setRectifyEdgeFillColor(0);
-  
+
   return stereo;
 }
 
-std::tuple<std::vector<dai::IMUSensor>, bool, dai::IMUSensor> getImuEnum(std::string rotationVectorType,std::string accelerometerType, std::string gyroscopeType, std::string magnetometerType){
+std::tuple<std::vector<dai::IMUSensor>, bool, dai::IMUSensor> getImuEnum(std::string rotationVectorType,
+                                                                         std::string accelerometerType,
+                                                                         std::string gyroscopeType,
+                                                                         std::string magnetometerType)
+{
   std::vector<dai::IMUSensor> imuEnums;
   dai::IMUSensor magnetometerEnum;
   bool magnetometerEnabled = false;
-  // ROTATION_VECTOR, GAME_ROTATION_VECTOR, GEOMAGNETIC_ROTATION_VECTOR, ARVR_STABILIZED_ROTATION_VECTOR, ARVR_STABILIZED_GAME_ROTATION_VECTOR
+
   std::map<std::string, dai::IMUSensor> rotationVectorMap = {
-      { "ROTATION_VECTOR", dai::IMUSensor::ROTATION_VECTOR },
-      { "GAME_ROTATION_VECTOR", dai::IMUSensor::GAME_ROTATION_VECTOR },
-      { "GEOMAGNETIC_ROTATION_VECTOR", dai::IMUSensor::GEOMAGNETIC_ROTATION_VECTOR },
-      { "ARVR_STABILIZED_ROTATION_VECTOR", dai::IMUSensor::ARVR_STABILIZED_ROTATION_VECTOR },
-      { "ARVR_STABILIZED_GAME_ROTATION_VECTOR", dai::IMUSensor::ARVR_STABILIZED_GAME_ROTATION_VECTOR }
+    { "ROTATION_VECTOR", dai::IMUSensor::ROTATION_VECTOR },
+    { "GAME_ROTATION_VECTOR", dai::IMUSensor::GAME_ROTATION_VECTOR },
+    { "GEOMAGNETIC_ROTATION_VECTOR", dai::IMUSensor::GEOMAGNETIC_ROTATION_VECTOR },
+    { "ARVR_STABILIZED_ROTATION_VECTOR", dai::IMUSensor::ARVR_STABILIZED_ROTATION_VECTOR },
+    { "ARVR_STABILIZED_GAME_ROTATION_VECTOR", dai::IMUSensor::ARVR_STABILIZED_GAME_ROTATION_VECTOR }
   };
-  // ACCELEROMETER_RAW, ACCELEROMETER, LINEAR_ACCELERATION, GRAVITY
-  std::map<std::string, dai::IMUSensor> accelerometerMap = {
-      { "ACCELEROMETER_RAW", dai::IMUSensor::ACCELEROMETER_RAW },
-      { "ACCELEROMETER", dai::IMUSensor::ACCELEROMETER },
-      { "LINEAR_ACCELERATION", dai::IMUSensor::LINEAR_ACCELERATION },
-      { "GRAVITY", dai::IMUSensor::GRAVITY }
-  };
-  // GYROSCOPE_RAW, GYROSCOPE_CALIBRATED, GYROSCOPE_UNCALIBRATED
+
+  std::map<std::string, dai::IMUSensor> accelerometerMap = { { "ACCELEROMETER_RAW", dai::IMUSensor::ACCELEROMETER_RAW },
+                                                             { "ACCELEROMETER", dai::IMUSensor::ACCELEROMETER },
+                                                             { "LINEAR_ACCELERATION",
+                                                               dai::IMUSensor::LINEAR_ACCELERATION },
+                                                             { "GRAVITY", dai::IMUSensor::GRAVITY } };
+
   std::map<std::string, dai::IMUSensor> gyroscopeMap = {
-      { "GYROSCOPE_RAW", dai::IMUSensor::GYROSCOPE_RAW },
-      { "GYROSCOPE_CALIBRATED", dai::IMUSensor::GYROSCOPE_CALIBRATED },
-      { "GYROSCOPE_UNCALIBRATED", dai::IMUSensor::GYROSCOPE_UNCALIBRATED }
+    { "GYROSCOPE_RAW", dai::IMUSensor::GYROSCOPE_RAW },
+    { "GYROSCOPE_CALIBRATED", dai::IMUSensor::GYROSCOPE_CALIBRATED },
+    { "GYROSCOPE_UNCALIBRATED", dai::IMUSensor::GYROSCOPE_UNCALIBRATED }
   };
-  // MAGNETOMETER_RAW, MAGNETOMETER_CALIBRATED, MAGNETOMETER_UNCALIBRATED
+
   std::map<std::string, dai::IMUSensor> magnetometerMap = {
-      { "MAGNETOMETER_RAW", dai::IMUSensor::MAGNETOMETER_RAW },
-      { "MAGNETOMETER_CALIBRATED", dai::IMUSensor::MAGNETOMETER_CALIBRATED },
-      { "MAGNETOMETER_UNCALIBRATED", dai::IMUSensor::MAGNETOMETER_UNCALIBRATED }
+    { "MAGNETOMETER_RAW", dai::IMUSensor::MAGNETOMETER_RAW },
+    { "MAGNETOMETER_CALIBRATED", dai::IMUSensor::MAGNETOMETER_CALIBRATED },
+    { "MAGNETOMETER_UNCALIBRATED", dai::IMUSensor::MAGNETOMETER_UNCALIBRATED }
   };
 
   if (rotationVectorMap.find(rotationVectorType) != rotationVectorMap.end())
@@ -147,7 +148,7 @@ std::tuple<std::vector<dai::IMUSensor>, bool, dai::IMUSensor> getImuEnum(std::st
   if (gyroscopeMap.find(gyroscopeType) != gyroscopeMap.end())
   {
     imuEnums.push_back(gyroscopeMap[gyroscopeType]);
-  } 
+  }
   if (accelerometerMap.find(accelerometerType) != accelerometerMap.end())
   {
     imuEnums.push_back(accelerometerMap[accelerometerType]);
@@ -157,10 +158,10 @@ std::tuple<std::vector<dai::IMUSensor>, bool, dai::IMUSensor> getImuEnum(std::st
     magnetometerEnabled = true;
     magnetometerEnum = magnetometerMap[magnetometerType];
   }
-  //return imuEnums, magnetometerEnabled and magnetometerEnum
   return std::make_tuple(imuEnums, magnetometerEnabled, magnetometerEnum);
 }
-void addIMUPipeline(dai::Pipeline& pipeline, int rate, int magnetometer_rate,  std::string name, std::vector<dai::IMUSensor> imuEnums, bool magnetometerEnabled, dai::IMUSensor magnetometerEnum)
+void addIMUPipeline(dai::Pipeline& pipeline, int rate, int magnetometer_rate, std::string name,
+                    std::vector<dai::IMUSensor> imuEnums, bool magnetometerEnabled, dai::IMUSensor magnetometerEnum)
 {
   auto imu = pipeline.create<dai::node::IMU>();
   auto xOut = pipeline.create<dai::node::XLinkOut>();
@@ -169,18 +170,20 @@ void addIMUPipeline(dai::Pipeline& pipeline, int rate, int magnetometer_rate,  s
   {
     imu->enableIMUSensor(imuEnums, rate);
   }
-  
+
   if (magnetometerEnabled)
   {
-    imu->enableIMUSensor( magnetometerEnum , magnetometer_rate);
+    imu->enableIMUSensor(magnetometerEnum, magnetometer_rate);
   }
   imu->setBatchReportThreshold(5);
   imu->setMaxBatchReports(20);
 
   imu->out.link(xOut->input);
 }
-std::tuple<dai::Pipeline, int, int> createPipeline(int fps, int imu_rate, int magnetometer_rate, std::string stereoResolution,
-                                                   std::string colorResolution, std::vector<dai::IMUSensor> imuEnums, bool magnetometerEnabled, dai::IMUSensor magnetometerEnum)
+std::tuple<dai::Pipeline, int, int> createPipeline(int fps, int imu_rate, int magnetometer_rate,
+                                                   std::string stereoResolution, std::string colorResolution,
+                                                   std::vector<dai::IMUSensor> imuEnums, bool magnetometerEnabled,
+                                                   dai::IMUSensor magnetometerEnum)
 {
   dai::Pipeline pipeline;
   pipeline.setXLinkChunkSize(0);
@@ -199,7 +202,6 @@ std::tuple<dai::Pipeline, int, int> createPipeline(int fps, int imu_rate, int ma
   auto xOutRight = pipeline.create<dai::node::XLinkOut>();
   xOutLeft->setStreamName("left");
   xOutRight->setStreamName("right");
-
 
   left_pipe->out.link(depth_pipe->left);
   right_pipe->out.link(depth_pipe->right);
@@ -255,35 +257,41 @@ std::shared_ptr<dai::Device> connect(ros::NodeHandle& nh, dai::Pipeline& pipelin
   return device;
 }
 
-void imuMagQCB(const std::string& /*name*/, const std::shared_ptr<dai::ADatatype>& data,dai::rosBridge::ImuConverter& imuConverter,const ros::Publisher& rosImuPub,const ros::Publisher& magPub, bool imuEnabled, bool magnetometerEnabled){
-    auto imuData = std::dynamic_pointer_cast<dai::IMUData>(data);
-    std::deque<depthai_ros_msgs::ImuWithMagneticField> deq;
-    imuConverter.toRosDaiMsg(imuData, deq);
-    while(deq.size() > 0) {
-        auto currMsg = deq.front();
-        if(!imuEnabled){
-          sensor_msgs::Imu imu = currMsg.imu;
-          imu.header = currMsg.header;
-          rosImuPub.publish(imu);
-        }
-        if(magnetometerEnabled){
-          sensor_msgs::MagneticField field = currMsg.field;
-          field.header = currMsg.header;
-          magPub.publish(field);
-        }
-        deq.pop_front();
+void imuMagQCB(const std::string& /*name*/, const std::shared_ptr<dai::ADatatype>& data,
+               dai::rosBridge::ImuConverter& imuConverter, const ros::Publisher& rosImuPub,
+               const ros::Publisher& magPub, bool imuEnabled, bool magnetometerEnabled)
+{
+  auto imuData = std::dynamic_pointer_cast<dai::IMUData>(data);
+  std::deque<depthai_ros_msgs::ImuWithMagneticField> deq;
+  imuConverter.toRosDaiMsg(imuData, deq);
+  while (deq.size() > 0)
+  {
+    auto currMsg = deq.front();
+    if (!imuEnabled)
+    {
+      sensor_msgs::Imu imu = currMsg.imu;
+      imu.header = currMsg.header;
+      rosImuPub.publish(imu);
     }
+    if (magnetometerEnabled)
+    {
+      sensor_msgs::MagneticField field = currMsg.field;
+      field.header = currMsg.header;
+      magPub.publish(field);
+    }
+    deq.pop_front();
+  }
 }
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "oak-d_w");
   ros::NodeHandle nh("~");
 
-  std::string tf, mxId, stereoResolution = "720p", rgbResolution = "1080p", 
-              rotationVectorType = "ROTATION_VECTOR", accelerometerType = "ACCELEROMETER", 
-              gyroscopeType = "GYROSCOPE_CALIBRATED", magnetometerType = "MAGNETOMETER_CALIBRATED",
-              left_camera_param_uri = "", right_camera_param_uri = "", rgb_camera_param_uri = "";
-  int badParams = 0, fps = 30, imu_rate = 200, magnetometer_rate=100;
+  std::string tf, mxId, stereoResolution = "720p", rgbResolution = "1080p", rotationVectorType = "ROTATION_VECTOR",
+                        accelerometerType = "ACCELEROMETER", gyroscopeType = "GYROSCOPE_CALIBRATED",
+                        magnetometerType = "MAGNETOMETER_CALIBRATED", left_camera_param_uri = "",
+                        right_camera_param_uri = "", rgb_camera_param_uri = "";
+  int badParams = 0, fps = 30, imu_rate = 200, magnetometer_rate = 100;
   double angularVelCovariance, linearAccelCovariance, rotationCovariance, magneticCovariance;
 
   badParams += !nh.getParam("mxId", mxId);
@@ -300,11 +308,10 @@ int main(int argc, char** argv)
   nh.getParam("rotationVectorType", rotationVectorType);
   nh.getParam("accelerometerType", accelerometerType);
   nh.getParam("gyroscopeType", gyroscopeType);
-  nh.getParam("magnetometerType", magnetometerType);  
+  nh.getParam("magnetometerType", magnetometerType);
   nh.getParam("left_camera_param_uri", left_camera_param_uri);
   nh.getParam("right_camera_param_uri", right_camera_param_uri);
   nh.getParam("rgb_camera_param_uri", rgb_camera_param_uri);
-  
 
   if (badParams > 0)
   {
@@ -315,20 +322,21 @@ int main(int argc, char** argv)
   std::vector<dai::IMUSensor> imuEnums;
   dai::IMUSensor magnetometerEnum;
   bool magnetometerEnabled = false;
-  std::tie(imuEnums, magnetometerEnabled, magnetometerEnum) = getImuEnum(rotationVectorType, accelerometerType, gyroscopeType, magnetometerType);
-  
+  std::tie(imuEnums, magnetometerEnabled, magnetometerEnum) =
+      getImuEnum(rotationVectorType, accelerometerType, gyroscopeType, magnetometerType);
 
   dai::Pipeline pipeline;
   int width, height;
-  std::tie(pipeline, width, height) = createPipeline(fps, imu_rate, magnetometer_rate, stereoResolution, rgbResolution, imuEnums, magnetometerEnabled, magnetometerEnum);
+  std::tie(pipeline, width, height) = createPipeline(fps, imu_rate, magnetometer_rate, stereoResolution, rgbResolution,
+                                                     imuEnums, magnetometerEnabled, magnetometerEnum);
   auto device = connect(nh, pipeline, mxId);
   auto calibrationHandler = device->readCalibration();
 
   dai::rosBridge::ImageConverter converter(tf + "_left_camera_optical_frame", true);
   dai::rosBridge::ImageConverter rightconverter(tf + "_right_camera_optical_frame", true);
   dai::rosBridge::ImageConverter rgbConverter(tf + "_rgb_camera_optical_frame", false);
-  dai::rosBridge::ImuConverter imuConverter(tf + "_imu_frame", dai::ros::ImuSyncMethod::COPY,
-                                            linearAccelCovariance, angularVelCovariance,rotationCovariance,magneticCovariance,true);
+  dai::rosBridge::ImuConverter imuConverter(tf + "_imu_frame", dai::ros::ImuSyncMethod::COPY, linearAccelCovariance,
+                                            angularVelCovariance, rotationCovariance, magneticCovariance, true);
 
   auto leftCameraInfo =
       converter.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::CAM_B, width, height);
@@ -348,71 +356,75 @@ int main(int argc, char** argv)
   std::unique_ptr<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>> rgbPublish;
   std::unique_ptr<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>> depthPublish;
 
-  if (left_camera_param_uri.empty()) {
+  if (left_camera_param_uri.empty())
+  {
     leftPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      leftQueue, nh, "left/image", [&](auto in, auto& out) { converter.toRosMsg(in, out); }, 30, leftCameraInfo, "left");
-  } else {
-    leftPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      leftQueue, nh, "left/image", [&](auto in, auto& out) { converter.toRosMsg(in, out); }, 30, left_camera_param_uri, "left");
+        leftQueue, nh, "left/image", [&](auto in, auto& out) { converter.toRosMsg(in, out); }, 30, leftCameraInfo,
+        "left");
   }
-  
-  if (right_camera_param_uri.empty()) {
-    rightPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      rightQueue, nh, "right/image", [&](auto in, auto& out) { rightconverter.toRosMsg(in, out); }, 30,
-      rightCameraInfo, "right");
-  } else {
-    rightPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      rightQueue, nh, "right/image", [&](auto in, auto& out) { rightconverter.toRosMsg(in, out); }, 30,
-      right_camera_param_uri, "right");
+  else
+  {
+    leftPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
+        leftQueue, nh, "left/image", [&](auto in, auto& out) { converter.toRosMsg(in, out); }, 30,
+        left_camera_param_uri, "left");
   }
 
-  if (rgb_camera_param_uri.empty()) {
+  if (right_camera_param_uri.empty())
+  {
+    rightPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
+        rightQueue, nh, "right/image", [&](auto in, auto& out) { rightconverter.toRosMsg(in, out); }, 30,
+        rightCameraInfo, "right");
+  }
+  else
+  {
+    rightPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
+        rightQueue, nh, "right/image", [&](auto in, auto& out) { rightconverter.toRosMsg(in, out); }, 30,
+        right_camera_param_uri, "right");
+  }
+
+  if (rgb_camera_param_uri.empty())
+  {
     rgbPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      imgQueue, nh, std::string("rgb/image_color"), [&](auto in, auto& out) { rgbConverter.toRosMsg(in, out); }, 30,
-      rgbCameraInfo, "rgb");
+        imgQueue, nh, std::string("rgb/image_color"), [&](auto in, auto& out) { rgbConverter.toRosMsg(in, out); }, 30,
+        rgbCameraInfo, "rgb");
     depthPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      depthQueue,
-      nh,
-      std::string("depth_registered/image_raw"),
-      std::bind(&dai::rosBridge::ImageConverter::toRosMsg,
-                &rgbConverter,  // since the converter has the same frame name
+        depthQueue, nh, std::string("depth_registered/image_raw"),
+        std::bind(&dai::rosBridge::ImageConverter::toRosMsg,
+                  &rgbConverter,  // since the converter has the same frame name
                                   // and image type is also same we can reuse it
-                std::placeholders::_1,
-                std::placeholders::_2),
-      30,
-      rgbCameraInfo,
-      "depth");
-  } else {
+                  std::placeholders::_1, std::placeholders::_2),
+        30, rgbCameraInfo, "depth");
+  }
+  else
+  {
     rgbPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      imgQueue, nh, std::string("rgb/image_color"), [&](auto in, auto& out) { rgbConverter.toRosMsg(in, out); }, 30,
-      rgb_camera_param_uri, "rgb");
+        imgQueue, nh, std::string("rgb/image_color"), [&](auto in, auto& out) { rgbConverter.toRosMsg(in, out); }, 30,
+        rgb_camera_param_uri, "rgb");
     depthPublish = std::make_unique<dai::rosBridge::BridgePublisher<sensor_msgs::Image, dai::ImgFrame>>(
-      depthQueue,
-      nh,
-      std::string("depth_registered/image_raw"),
-      std::bind(&dai::rosBridge::ImageConverter::toRosMsg,
-                &rgbConverter,  // since the converter has the same frame name
-                                  // and image type is also same we can reuse it
-                std::placeholders::_1,
-                std::placeholders::_2),
-      30,
-      rgb_camera_param_uri,
-      "depth");
+        depthQueue, nh, std::string("depth_registered/image_raw"),
+        std::bind(&dai::rosBridge::ImageConverter::toRosMsg, &rgbConverter, std::placeholders::_1,
+                  std::placeholders::_2),
+        30, rgb_camera_param_uri, "depth");
   }
 
   ros::Publisher rosImuPub;
   ros::Publisher magPub;
-  if(!imuEnums.empty()){
+  if (!imuEnums.empty())
+  {
     rosImuPub = nh.advertise<sensor_msgs::Imu>("imu/data", 10);
   }
-  if(magnetometerEnabled){
+  if (magnetometerEnabled)
+  {
     magPub = nh.advertise<sensor_msgs::MagneticField>("imu/mag", 10);
   }
-            
+
   leftPublish->addPublisherCallback();
   rightPublish->addPublisherCallback();
   rgbPublish->addPublisherCallback();
-  imuQueue->addCallback([&imuConverter,&rosImuPub,&magPub, imuEnabled = imuEnums.empty(), magnetometerEnabled](const auto& name, const auto& data){imuMagQCB(name,data,imuConverter,rosImuPub,magPub,imuEnabled,magnetometerEnabled);});
+  imuQueue->addCallback([&imuConverter, &rosImuPub, &magPub, imuEnabled = imuEnums.empty(),
+                         magnetometerEnabled](const auto& name, const auto& data) {
+    imuMagQCB(name, data, imuConverter, rosImuPub, magPub, imuEnabled, magnetometerEnabled);
+  });
   depthPublish->addPublisherCallback();
 
   ros::spin();
