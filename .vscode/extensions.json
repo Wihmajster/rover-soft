@@ -5,6 +5,7 @@
         "cheshirekow.cmake-format",
         "ms-python.python",
         "ms-iot.vscode-ros",
-        "eeyore.yapf"
+        "eeyore.yapf",
+        "xaver.clang-format"
     ]
 }

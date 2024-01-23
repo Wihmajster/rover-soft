@@ -30,4 +30,7 @@
         "editor.defaultFormatter": "eeyore.yapf"
     },
     "cmake.configureOnOpen": false,
+    "[cpp]": {
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
 }
