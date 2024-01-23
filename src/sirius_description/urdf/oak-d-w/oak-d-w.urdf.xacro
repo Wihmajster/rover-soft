@@ -182,7 +182,7 @@
         <alwaysOn>true</alwaysOn>
         <updateRate>${stereo_fps}</updateRate>
         <cameraName>/${prefix}_camera</cameraName>
-        <imageTopicName>rgb/image_rect</imageTopicName>
+        <imageTopicName>rgb/image_rect_color</imageTopicName>
         <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
         <depthImageTopicName>depth_registered/image</depthImageTopicName>
         <depthImageInfoTopicName>depth_registered/camera_info</depthImageInfoTopicName>

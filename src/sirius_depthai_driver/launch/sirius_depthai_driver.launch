@@ -5,27 +5,41 @@
 
     <arg name="mxId"                 default="19443010B1B2F51200"/>
     <arg name="tf"         default="front_camera" />
-    <arg name="imu_frequency"         default="200" />
+    <arg name="imu_rate"         default="200" />
+    <arg name="magnetometer_rate"         default="100" />
     <arg name="fps"            default="30"  />
-    <arg name="monoResolution"        default="720p"/> 
+    <arg name="stereoResolution"        default="720p"/> 
     <arg name="rgbResolution"        default="1080p"/> 
     <arg name="angularVelCovariance"  default="0"   />
     <arg name="linearAccelCovariance" default="0.4"   /> <!-- Variance in m/s^2-->
     <arg name="rotationCovariance"  default="$(eval pi/6)"   /> <!-- Variance in radians-->
     <arg name="magneticCovariance" default="0"   />
+    
+    <arg name="rotationVectorType" default="ROTATION_VECTOR" />
+    <arg name="accelerometerType" default="LINEAR_ACCELERATION" />
+    <arg name="gyroscopeType" default="" />
+    <arg name="magnetometerType" default="" />  
 
 
-    <node name="$(arg name)" pkg="sirius_cameras" type="sirius_cameras_oak_d_w" output="screen" required="true">
+    <node name="$(arg name)" pkg="sirius_depthai_driver" type="sirius_depthai_driver" output="screen" required="true">
         <param name="mxId"                  value="$(arg mxId)"/>
-        <param name="imu_frequency"            value="$(arg imu_frequency)" />
+        <param name="imu_rate"            value="$(arg imu_rate)" />
+        <param name="magnetometer_rate"            value="$(arg magnetometer_rate)" />
         <param name="tf"            value="$(arg tf)" />
         <param name="fps"            value="$(arg fps)" />
-        <param name="monoResolution"        value="$(arg monoResolution)" />
+        <param name="stereoResolution"        value="$(arg stereoResolution)" />
         <param name="rgbResolution"        value="$(arg rgbResolution)" />
         <param name="angularVelCovariance"  value="$(arg angularVelCovariance)" />
         <param name="linearAccelCovariance" value="$(arg linearAccelCovariance)" />
         <param name="rotationCovariance"  value="$(arg rotationCovariance)" />
         <param name="magneticCovariance" value="$(arg magneticCovariance)" />
+        <param name="rotationVectorType" value="$(arg rotationVectorType)" />
+        <param name="accelerometerType" value="$(arg accelerometerType)" />
+        <param name="gyroscopeType" value="$(arg gyroscopeType)" />
+        <param name="magnetometerType" value="$(arg magnetometerType)" />
+        <!-- <param name="left_camera_param_uri" value="$(arg left_camera_param_uri)" />
+        <param name="right_camera_param_uri" value="$(arg right_camera_param_uri)" />
+        <param name="rgb_camera_param_uri" value="$(arg rgb_camera_param_uri)" /> -->
     </node>      
    
     
