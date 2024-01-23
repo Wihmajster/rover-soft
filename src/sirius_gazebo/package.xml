@@ -8,6 +8,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
   <exec_depend>sirius_calibration</exec_depend>
+  <exec_depend>sirius_control</exec_depend>
   <exec_depend>sirius_description</exec_depend>
   <exec_depend>leo_gazebo_worlds</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>

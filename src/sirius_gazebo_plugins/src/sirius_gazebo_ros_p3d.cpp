@@ -20,11 +20,8 @@
  * Apache License, Version 2.0.
 */
 
-#include <string>
 #include <tf/tf.h>
-#include <stdlib.h>
-
-#include "sirius_gazebo_ros_p3d/sirius_gazebo_ros_p3d.h"
+#include "sirius_gazebo_plugins/sirius_gazebo_ros_p3d.h"
 #ifdef ENABLE_PROFILER
 #include <ignition/common/Profiler.hh>
 #endif

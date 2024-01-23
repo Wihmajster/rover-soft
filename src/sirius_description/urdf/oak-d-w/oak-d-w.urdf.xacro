@@ -246,13 +246,16 @@
           </z>
         </linear_acceleration>
       </imu>
-      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+      <plugin filename="libsirius_gazebo_ros_imu_sensor.so" name="imu_plugin">
         <topicName>/${prefix}_camera/imu/data</topicName>
         <frameName>${prefix}_camera_imu_link</frameName>
         <updateRateHZ>${imu_frequency}</updateRateHZ>
         <initialOrientationAsReference>false</initialOrientationAsReference>
         <xyzOffset>0 0.0 0.0</xyzOffset>
         <rpyOffset>0 0 ${datum[2] * pi/180}</rpyOffset>
+        <orientationCovariance>3.5 3.5 3.5</orientationCovariance>
+        <angularVelocityCovariance>${imu_calibration.imu0.gyroscope_noise_density**2} 0 0 0 ${imu_calibration.imu0.gyroscope_noise_density**2} 0 0 0 ${imu_calibration.imu0.gyroscope_noise_density**2}</angularVelocityCovariance>
+        <linearAccelerationCovariance>${imu_calibration.imu0.accelerometer_noise_density**2} 0 0 0 ${imu_calibration.imu0.accelerometer_noise_density**2} 0 0 0 ${imu_calibration.imu0.accelerometer_noise_density**2}</linearAccelerationCovariance>
       </plugin>
     </sensor>
   </gazebo>
@@ -281,7 +284,7 @@
           </noise>
         </z>
       </magnetometer>
-      <plugin filename="libgazebo_ros_magnetometer_sensor.so" name="magnetometer_plugin">
+      <plugin filename="libsirius_gazebo_ros_magnetometer_sensor.so" name="magnetometer_plugin">
         <topicName>/${prefix}_camera/imu/mag</topicName>
         <frameName>${prefix}_camera_imu_link</frameName>
         <updateRateHZ>50.0</updateRateHZ>

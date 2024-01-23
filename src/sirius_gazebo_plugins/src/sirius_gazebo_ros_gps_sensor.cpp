@@ -20,13 +20,9 @@
  * Apache License, Version 2.0.
 */
 
-#include <gazebo_ros_gps_sensor/gazebo_ros_gps_sensor.h>
+#include <sirius_gazebo_plugins/sirius_gazebo_ros_gps_sensor.h>
 #include <gazebo/common/Events.hh>
 #include <gazebo/physics/physics.hh>
-#include <cmath>
-#include <sstream>
-#include <algorithm>
-#include <cctype>
 
 GZ_REGISTER_SENSOR_PLUGIN(gazebo::GazeboRosGpsSensor)
 
@@ -89,7 +85,7 @@ namespace gazebo
       return;
     }
 
-    if (gps_data_publisher.getNumSubscribers() > 0)
+    if (gps_data_publisher.getNumSubscribers() > 0 || gps_velocity_data_publisher.getNumSubscribers() > 0)
     {
       gps_msg.latitude = sensor->Latitude().Degree();
       gps_msg.longitude = sensor->Longitude().Degree();
