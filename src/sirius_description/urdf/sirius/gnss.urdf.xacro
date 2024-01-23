@@ -33,7 +33,7 @@
         <position_sensing>
           <horizontal>
             <noise type="gaussian">
-              <!-- sqrt(-1/(2*log(0.5))) = 0.8493218002880191 -->
+              <!-- sqrt(-1/(2*ln(0.5))) = 0.8493218002880191 -->
               <!-- This is the ratio needed to convert CEP to std dev of single axis -->
               <stddev>${horizontal_cep * 0.8493218002880191}</stddev>
             </noise>
