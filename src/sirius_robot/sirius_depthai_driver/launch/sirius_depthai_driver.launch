@@ -7,12 +7,12 @@
     <arg name="tf"         default="front_camera" />
     <arg name="imu_rate"         default="200" />
     <arg name="magnetometer_rate"         default="100" />
-    <arg name="fps"            default="30"  />
+    <arg name="fps"            default="20"  />
     <arg name="stereoResolution"        default="720p"/> 
     <arg name="rgbResolution"        default="1080p"/> 
-    <arg name="angularVelCovariance"  default="0"   />
-    <arg name="linearAccelCovariance" default="0.4"   /> <!-- Variance in m/s^2-->
-    <arg name="rotationCovariance"  default="$(eval pi/6)"   /> <!-- Variance in radians-->
+    <arg name="angularVelCovariance"  default="0.0004829535864265493"   />
+    <arg name="linearAccelCovariance" default="0.020988637794234512"   /> <!-- Variance in m/s^2-->
+    <arg name="rotationCovariance"  default="$(eval (3.5 * pi/180)**2)"   /> <!-- Variance in radians-->
     <arg name="magneticCovariance" default="0"   />
     
     <arg name="rotationVectorType" default="ROTATION_VECTOR" />
@@ -62,4 +62,9 @@
         <remap from="depth_registered/points" to="/$(arg name)/point_cloud/cloud_registered"/>
     </node>
 
+    <node pkg="imu_transformer" type="imu_transformer_node" name="imu_data_transformer" output="screen">
+        <remap from="imu_in/data" to="/$(arg imu_name)/imu/data"/>
+        <remap from="imu_out/data" to="/imu_compensated/data"/>
+        <param name="target_frame" value="base_link"/>
+    </node>
 </launch>

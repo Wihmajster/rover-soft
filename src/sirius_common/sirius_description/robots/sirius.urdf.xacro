@@ -50,17 +50,17 @@
   </xacro:macro>
 
     <!-- Macro to combine suspension and wheel -->
-  <xacro:macro name="drive_system" params="prefix flip_x:=false flip_y:=false mechanical:=^">
-    <xacro:suspension prefix="${prefix}" material="dark_bronze" flip="${flip_y}" />
-    <xacro:wheel prefix="${prefix}" material="dark_gray" material_rim="white" flip="${flip_x}" />
+  <xacro:macro name="drive_system" params="prefix flip_y_plane:=false flip_x_plane:=false mechanical:=^">
+    <xacro:suspension prefix="${prefix}" material="dark_bronze" flip_x_plane="${flip_x_plane}" flip_y_plane="${flip_y_plane}" />
+    <xacro:wheel prefix="${prefix}" material="dark_gray" material_rim="white" flip="${flip_y_plane}" />
 
     <xacro:joint  type="continuous" 
                   parent="${prefix}_suspension" 
                   child="${prefix}_wheel" 
-                  xyz="${(1 - 2 * flip_y)  * (mechanical['wheel_base'] - mechanical['suspension_separation_x'])/2 } ${(1 - 2 * flip_x)  * (mechanical['wheel_track'] - mechanical['suspension_separation_y'])/2} ${-mechanical['suspension_height']}" 
+                  xyz="${(1 - 2 * flip_x_plane)  * (mechanical['wheel_base'] - mechanical['suspension_separation_x'])/2 } ${(1 - 2 * flip_y_plane)  * (mechanical['wheel_track'] - mechanical['suspension_separation_y'])/2} ${-mechanical['suspension_height']}" 
                   rpy="0 0 0" 
                   axis="0 1 0"
-                  limit_effort="18.0"
+                  limit_effort="80.0"
                   limit_velocity="8.0" />
 
     <transmission name="${prefix}_wheel_transmission">
@@ -77,10 +77,10 @@
   <!-- Define subcomponents links -->
   <link name="base_link" />
   <xacro:platform material="white" />
-  <xacro:drive_system prefix="back_left" flip_y="true" />
-  <xacro:drive_system prefix="back_right" flip_x="true" flip_y="true"/>
+  <xacro:drive_system prefix="back_left" flip_x_plane="true" />
+  <xacro:drive_system prefix="back_right" flip_y_plane="true" flip_x_plane="true"/>
   <xacro:drive_system prefix="front_left" />
-  <xacro:drive_system prefix="front_right"  flip_x="true"/>
+  <xacro:drive_system prefix="front_right"  flip_y_plane="true"/>
   <xacro:indicator_light material="gray" />
 
   <!-- Define sensors and cameras links -->

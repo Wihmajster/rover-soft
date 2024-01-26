@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-<xacro:macro name="indicator_light" params="material prefix:='' collisions:=${xacro.load_yaml('$(find sirius_description)/urdf/sirius/collisions.yaml')} inertial:=${xacro.load_yaml('$(find sirius_description)/config/inertial/indicator_light.yaml')}">
+<xacro:macro name="indicator_light" params="material prefix:='' collisions:=${xacro.load_yaml('$(find sirius_description)/urdf/sirius/collisions.yaml')}">
   <xacro:property name="_prefix" value="${prefix + '_' if prefix else ''}"/>
   <link name="${_prefix}indicator_light">
     <visual>
@@ -10,10 +10,6 @@
         <mesh filename="package://sirius_description/meshes/sirius/indicator_light.stl" scale="0.001 0.001 0.001"/>
       </geometry>
     </visual>
-    <inertial>
-      <mass value="${inertial['indicator_light_mass']}"/>
-      <inertia ixx="${inertial['indicator_light_inertia']['ixx']}" ixy="${inertial['indicator_light_inertia']['ixy']}" ixz="${inertial['indicator_light_inertia']['ixz']}" iyy="${inertial['indicator_light_inertia']['iyy']}" iyz="${inertial['indicator_light_inertia']['iyz']}" izz="${inertial['indicator_light_inertia']['izz']}"/>
-    </inertial>
     <collision>    
       <geometry>
           <cylinder length="${collisions['indicator_light_height']}" radius="${collisions['indicator_light_radius']}"/>

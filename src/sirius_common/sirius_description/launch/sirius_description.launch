@@ -14,6 +14,8 @@
     
     <param name="robot_description" command="$(find xacro)/xacro '$(arg model)' calibration_path:='$(arg camera_calibration_path)' stereo_fps:='$(arg stereo_fps)' imu_frequency:='$(arg imu_frequency)' datum:='$(arg spherical_coordinates)' elevation:='$(arg elevation)' year:='$(arg year)'" />
 
+    <include file="$(find sirius_calibration)/launch/calibration.launch" />
+
     <node pkg="robot_state_publisher" type="robot_state_publisher"  name="robot_state_publisher">
         <param name="publish_frequency" type="double" value="$(arg robot_state_frequency)" />
     </node>

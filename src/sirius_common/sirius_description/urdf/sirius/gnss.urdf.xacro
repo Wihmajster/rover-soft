@@ -2,8 +2,13 @@
 <!-- Based on Sparkfun Multi-Band antenna. Mesh generated from step provided by Sparkfun
      https://www.sparkfun.com/products/21801 -->
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-<xacro:macro name="gnss" params="prefix:='' material collisions:=${xacro.load_yaml('$(find sirius_description)/urdf/sirius/collisions.yaml')} inertial:=${xacro.load_yaml('$(find sirius_description)/config/inertial/gnss.yaml')} datum:=^ elevation:=^ horizontal_cep:=1.0 vertical_cep:=1.5 rate:=20.0">
+<xacro:macro name="gnss" params="prefix:='' material collisions:=${xacro.load_yaml('$(find sirius_description)/urdf/sirius/collisions.yaml')} datum:=^ elevation:=^ horizontal_cep:=1.0 vertical_cep:=1.5 rate:=20.0">
   <xacro:property name="_prefix" value="${prefix + '_' if prefix else ''}"/>
+  <!-- sqrt(-1/(2*ln(0.5))) = 0.8493218002880191 -->
+  <!-- This is the ratio needed to convert CEP to std dev of single axis -->
+  <xacro:property name="vertical_stddev" value="${vertical_cep * 0.8493218002880191}"/>
+  <xacro:property name="horizontal_stddev" value="${horizontal_cep * 0.8493218002880191}"/>
+  <xacro:property name="velocity_stddev" value="${0.05 * 0.8493218002880191}"/>
   <link name="${_prefix}gnss">
     <visual>
       <material name="${material}">
@@ -13,10 +18,6 @@
       </geometry>
       <origin xyz="0 0 ${collisions['gnss_height']/2}" rpy="${pi/2} 0 0" />
     </visual>
-    <inertial>
-      <mass value="${inertial['gnss_mass']}"/>
-      <inertia ixx="${inertial['gnss_inertia']['ixx']}" ixy="${inertial['gnss_inertia']['ixy']}" ixz="${inertial['gnss_inertia']['ixz']}" iyy="${inertial['gnss_inertia']['iyy']}" iyz="${inertial['gnss_inertia']['iyz']}" izz="${inertial['gnss_inertia']['izz']}"/>
-    </inertial>
     <collision>    
       <geometry>
           <cylinder length="${collisions['gnss_height']}" radius="${collisions['gnss_radius']}"/>
@@ -33,27 +34,24 @@
         <position_sensing>
           <horizontal>
             <noise type="gaussian">
-              <!-- sqrt(-1/(2*ln(0.5))) = 0.8493218002880191 -->
-              <!-- This is the ratio needed to convert CEP to std dev of single axis -->
-              <stddev>${horizontal_cep * 0.8493218002880191}</stddev>
+              <stddev>${horizontal_stddev}</stddev>
             </noise>
           </horizontal>
           <vertical>
             <noise type="gaussian">
-              <mean>0.0</mean>
-              <stddev>${vertical_cep * 0.8493218002880191}</stddev>
+              <stddev>${vertical_stddev}</stddev>
             </noise>
           </vertical>
         </position_sensing>
         <velocity_sensing>
           <horizontal>
             <noise type="gaussian">
-              <stddev>${0.05 * 0.8493218002880191}</stddev>
+              <stddev>${velocity_stddev}</stddev>
             </noise>
           </horizontal>
           <vertical>
             <noise type="gaussian">
-              <stddev>${0.05 * 0.8493218002880191}</stddev>
+              <stddev>${velocity_stddev}</stddev>
             </noise>
           </vertical>
         </velocity_sensing>
@@ -68,8 +66,7 @@
             <headingDeg>${datum[2]}</headingDeg>
             <elevation>${elevation}</elevation>
         </sphericalCoordinates>
-        <positionCovariance>${horizontal_cep * 0.8493218002880191} 0 0 0 ${horizontal_cep * 0.8493218002880191} 0 0 0 ${vertical_cep * 0.8493218002880191}</positionCovariance>
-        <positionCovarianceType>diagonal_known</positionCovarianceType>
+        <positionCovariance>${horizontal_stddev} 0 0 0 ${horizontal_stddev} 0 0 0 ${vertical_stddev}</positionCovariance>
       </plugin>
     </sensor>
   </gazebo>

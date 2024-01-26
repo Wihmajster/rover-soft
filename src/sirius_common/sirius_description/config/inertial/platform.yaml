@@ -1,8 +1,10 @@
-platform_mass: 7.621
+# Weight and inertia is estimated by hand
+# CAD needs to be updated, before better values can be obtained 
+platform_mass: 15.863
 platform_inertia: 
-  ixx: 3.642
-  ixy: 0.093
-  ixz: 1.723
-  iyy: 4.604
-  iyz: 0.205
-  izz: 1.087
+  ixx: 0.17628
+  ixy: 0
+  ixz: 0
+  iyy: 0.33139
+  iyz: 0
+  izz: 0.40919

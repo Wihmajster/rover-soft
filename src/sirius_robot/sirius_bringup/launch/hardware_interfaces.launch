@@ -2,7 +2,7 @@
     <rosparam file="$(find sirius_bringup)/config/hardware_interfaces.yaml" command="load"/> 
 
     <remap from="/sirius/controller/wheels/cmd_vel" to="/cmd_vel" />
-    <remap from="/sirius/controller/wheels/odom" to="/odom" />
+    <remap from="/sirius/controller/wheels/odom" to="/wheels/odom" />
 
     <node name="sirius_control" pkg="sirius_control" type="sirius_control" output="screen"/>
 

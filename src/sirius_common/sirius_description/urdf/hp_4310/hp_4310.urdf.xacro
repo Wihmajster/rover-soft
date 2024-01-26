@@ -1,5 +1,5 @@
 <robot xmlns:xacro="http://wiki.ros.org/xacro">
-<xacro:macro name="hp_4310" params="prefix:=hp_4310 material cameras:=${xacro.load_yaml('$(find sirius_description)/urdf/hp_4310/collisions.yaml')} cameras_inertial:=${xacro.load_yaml('$(find sirius_description)/config/inertial/hp_4310.yaml')}">
+<xacro:macro name="hp_4310" params="prefix:=hp_4310 material cameras:=${xacro.load_yaml('$(find sirius_description)/urdf/hp_4310/collisions.yaml')}">
   <link name="${prefix}_camera">
     <visual>
       <material name="${material}"/>
@@ -14,10 +14,6 @@
       </geometry>
       <origin xyz="${-cameras['hp_4310_thickness']/2} 0 0"/>
     </collision>
-    <cameras_inertial>
-      <mass value="${cameras_inertial['hp_4310_mass']}"/>
-      <inertia ixx="${cameras_inertial['hp_4310_inertia']['ixx']}" ixy="${cameras_inertial['hp_4310_inertia']['ixy']}" ixz="${cameras_inertial['hp_4310_inertia']['ixz']}" iyy="${cameras_inertial['hp_4310_inertia']['iyy']}" iyz="${cameras_inertial['hp_4310_inertia']['iyz']}" izz="${cameras_inertial['hp_4310_inertia']['izz']}"/>
-    </cameras_inertial>
   </link>
   <gazebo reference="${prefix}_camera">
       <visual>  
