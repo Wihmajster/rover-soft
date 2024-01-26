@@ -2,11 +2,11 @@ robot_hardware:
   - wheels_left
   - wheels_right
 wheels_left:
-  type: odrive/OdriveHWInterface
+  type: sirius/OdriveHWInterface
   motor0: front_left_wheel_joint
   motor1: back_left_wheel_joint
 wheels_right:
-  type: odrive/OdriveHWInterface
+  type: sirius/OdriveHWInterface
   motor0: front_right_wheel_joint
   motor1: back_right_wheel_joint
 odrive_driver: 

@@ -13,4 +13,6 @@
   <exec_depend>sirius_control</exec_depend>
   <exec_depend>sirius_description</exec_depend>
   <exec_depend>sirius_gazebo_plugins</exec_depend>
+  <exec_depend>sirius_navigation</exec_depend>
+  <exec_depend>dynamic_reconfigure</exec_depend>
 </package>

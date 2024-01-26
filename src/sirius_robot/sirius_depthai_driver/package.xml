@@ -14,6 +14,7 @@
   <depend>roscpp</depend>
   <depend>sensor_msgs</depend>
   <exec_depend>depthai-ros</exec_depend>
+  <exec_depend>imu_transformer</exec_depend>
   <exec_depend>nodelet</exec_depend>
 
 </package>
