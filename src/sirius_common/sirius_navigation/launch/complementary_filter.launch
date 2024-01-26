@@ -1,6 +1,5 @@
-<!-- Complementary filter launch file -->\
-<!-- <launch>
-  <arg name="imu_name"            default="front_camera"/>
+<launch>
+  <arg name="imu_name" default="front_camera"/>
 
   <!-- Complemetary filter works only with NED frame -->
   <!-- So we republish imu data with frame_id matching the NED frame -->
@@ -18,6 +17,7 @@
     <param name="type" value="sensor_msgs/MagneticField" />
     <param name="expression" value="sensor_msgs.msg.MagneticField(header=std_msgs.msg.Header(seq=m.header.seq,stamp=m.header.stamp,frame_id='$(arg imu_name)_imu_link_ned'),magnetic_field=m.magnetic_field,magnetic_field_covariance=m.magnetic_field_covariance)" />
     <param name="imports" value="sensor_msgs std_msgs" />
+  </node>
 
   <!-- Actualy run complementary filter -->
   <node pkg="imu_complementary_filter" type="complementary_filter_node"
@@ -32,10 +32,9 @@
     <remap from="imu/data_raw" to="/$(arg imu_name)/imu_ned/data"/>
     <remap from="imu/mag" to="/$(arg imu_name)/imu_ned/mag"/>
     <remap from="imu/mag" to="/$(arg imu_name)/imu_ned/mag"/>
-  </node> -->
+  </node>
 
-  <!-- Now transform data to base_link frame -->
-  <!-- This wil
+  <!-- Now transform orientation to base_link frame -->
   <node pkg="imu_transformer" type="imu_transformer_node" name="imu_data_transformer" output="screen">
     <remap from="imu_in/data" to="/$(arg imu_name)/imu_ned/data"/>
     <remap from="imu_out/data" to="/imu/data"/>
