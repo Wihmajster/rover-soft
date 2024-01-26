@@ -9,7 +9,7 @@
       </geometry>
     </visual>
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <origin xyz="${inertial['platform_center_of_mass']['x']} ${inertial['platform_center_of_mass']['y']} ${inertial['platform_center_of_mass']['z']}" />
       <mass value="${inertial['platform_mass']}"/>
       <inertia ixx="${inertial['platform_inertia']['ixx']}" ixy="${inertial['platform_inertia']['ixy']}" ixz="${inertial['platform_inertia']['ixz']}" iyy="${inertial['platform_inertia']['iyy']}" iyz="${inertial['platform_inertia']['iyz']}" izz="${inertial['platform_inertia']['izz']}"/>
     </inertial>
